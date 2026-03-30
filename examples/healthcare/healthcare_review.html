@@ -197,6 +197,13 @@
             text-transform: uppercase;
         }
         .detail-value { font-size: 14px; color: var(--text); }
+        .record-link {
+            color: var(--accent-light, #ff6b81);
+            text-decoration: none;
+            border-bottom: 1px solid rgba(255,107,129,0.3);
+            transition: border-color 0.15s;
+        }
+        .record-link:hover { border-bottom-color: var(--accent-light, #ff6b81); }
 
         .relationships {
             margin-top: 15px;
@@ -433,7 +440,7 @@ let data;
 let currentFilter = 'all';
 let flaggedRecords = [];
 let recordLookup = {};
-const missionInfo = {"mission_id": "healthcare-record-review-20260330-4815bb", "data_fingerprint": "cd791f082ea58b97", "app_fingerprint": "f989af0e2666db14", "generated": "2026-03-30T09:31:37.483568", "preview": false, "title": "Healthcare Record Review"};
+const missionInfo = {"mission_id": "healthcare-record-review-20260330-a2ae2d", "data_fingerprint": "cd791f082ea58b97", "app_fingerprint": "f989af0e2666db14", "generated": "2026-03-30T09:55:53.166757", "preview": false, "title": "Healthcare Record Review"};
 const _appIdEl = document.getElementById('welcomeAppId');
 if (_appIdEl) _appIdEl.textContent = missionInfo.mission_id || '';
 const searchInput = document.getElementById('searchInput');
@@ -652,6 +659,25 @@ function formatPercent(value) {
     return num + '%';
 }
 
+function linkedValue(idValue, entityKey, matchField, displayFields) {
+    if (!idValue) return '';
+    const records = data[entityKey] || [];
+    const match = records.find(r => String(r[matchField]) === String(idValue));
+    if (!match) return esc(String(idValue));
+    const label = displayFields.map(f => match[f] || '').filter(Boolean).join(' ').trim() || String(idValue);
+    const searchTerm = esc(label);
+    return `<a class="record-link" href="#" onclick="event.preventDefault();filterToLinked('${esc(entityKey)}','${esc(String(idValue))}','${esc(matchField)}')">${esc(label)}</a>`;
+}
+
+function filterToLinked(entityKey, idValue, matchField) {
+    // Switch filter tab and search for the specific ID
+    filterTo(entityKey);
+    searchInput.value = idValue;
+    performSearch();
+    var searchSection = document.getElementById('searchSection');
+    if (searchSection) window.scrollTo({top: searchSection.offsetTop - 80, behavior: 'smooth'});
+}
+
 
 function render_patients(item) {
     const name = ((item['First_Name'] || '') + ' ' + (item['Last_Name'] || '')).trim();
@@ -747,7 +773,7 @@ function render_appointments(item) {
                onchange="updateFlagNote('${recordId}', this.value)">
         <div class="result-details">
             ${item['Appointment_ID'] ? `<div class="detail-item"><div class="detail-label">Appt ID</div><div class="detail-value">${highlight(item['Appointment_ID'])}</div></div>` : ''}
-            ${item['Doctor_ID'] ? `<div class="detail-item"><div class="detail-label">Doctor</div><div class="detail-value">${highlight(item['Doctor_ID'])}</div></div>` : ''}
+            ${item['Doctor_ID'] ? `<div class="detail-item"><div class="detail-label">Doctor</div><div class="detail-value">${linkedValue(item['Doctor_ID'], 'doctors', 'Doctor_ID', ['Title', 'First_Name', 'Last_Name'])}</div></div>` : ''}
             ${item['Appointment_Date'] ? `<div class="detail-item"><div class="detail-label">Date</div><div class="detail-value">${highlight(item['Appointment_Date'])}</div></div>` : ''}
             ${item['Appointment_Time'] ? `<div class="detail-item"><div class="detail-label">Time</div><div class="detail-value">${highlight(item['Appointment_Time'])}</div></div>` : ''}
             ${item['Type'] ? `<div class="detail-item"><div class="detail-label">Type</div><div class="detail-value">${highlight(item['Type'])}</div></div>` : ''}
@@ -783,8 +809,8 @@ function render_prescriptions(item) {
                onchange="updateFlagNote('${recordId}', this.value)">
         <div class="result-details">
             ${item['Prescription_ID'] ? `<div class="detail-item"><div class="detail-label">Rx ID</div><div class="detail-value">${highlight(item['Prescription_ID'])}</div></div>` : ''}
-            ${item['Patient_ID'] ? `<div class="detail-item"><div class="detail-label">Patient</div><div class="detail-value">${highlight(item['Patient_ID'])}</div></div>` : ''}
-            ${item['Doctor_ID'] ? `<div class="detail-item"><div class="detail-label">Prescriber</div><div class="detail-value">${highlight(item['Doctor_ID'])}</div></div>` : ''}
+            ${item['Patient_ID'] ? `<div class="detail-item"><div class="detail-label">Patient</div><div class="detail-value">${linkedValue(item['Patient_ID'], 'patients', 'Patient_ID', ['First_Name', 'Last_Name'])}</div></div>` : ''}
+            ${item['Doctor_ID'] ? `<div class="detail-item"><div class="detail-label">Prescriber</div><div class="detail-value">${linkedValue(item['Doctor_ID'], 'doctors', 'Doctor_ID', ['Title', 'First_Name', 'Last_Name'])}</div></div>` : ''}
             ${item['Dosage'] ? `<div class="detail-item"><div class="detail-label">Dosage</div><div class="detail-value">${highlight(item['Dosage'])}</div></div>` : ''}
             ${item['Frequency'] ? `<div class="detail-item"><div class="detail-label">Frequency</div><div class="detail-value">${highlight(item['Frequency'])}</div></div>` : ''}
             ${item['Quantity'] ? `<div class="detail-item"><div class="detail-label">Qty</div><div class="detail-value">${highlight(item['Quantity'])}</div></div>` : ''}

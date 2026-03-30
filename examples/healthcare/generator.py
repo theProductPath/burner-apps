@@ -104,8 +104,10 @@ FIELD_CONFIG = {
     ],
     'appointments': [
         {'field': 'Appointment_ID', 'label': 'Appt ID'},
-        {'field': 'Patient_ID', 'label': 'Patient', 'is_title': True},
-        {'field': 'Doctor_ID', 'label': 'Doctor'},
+        {'field': 'Patient_ID', 'label': 'Patient', 'is_title': True,
+         'link_to': 'patients', 'link_match': 'Patient_ID', 'link_display': ['First_Name', 'Last_Name']},
+        {'field': 'Doctor_ID', 'label': 'Doctor',
+         'link_to': 'doctors', 'link_match': 'Doctor_ID', 'link_display': ['Title', 'First_Name', 'Last_Name']},
         {'field': 'Appointment_Date', 'label': 'Date'},
         {'field': 'Appointment_Time', 'label': 'Time'},
         {'field': 'Type', 'label': 'Type'},
@@ -117,8 +119,10 @@ FIELD_CONFIG = {
     'prescriptions': [
         {'field': 'Prescription_ID', 'label': 'Rx ID'},
         {'field': 'Medication_Name', 'label': 'Medication', 'is_title': True},
-        {'field': 'Patient_ID', 'label': 'Patient'},
-        {'field': 'Doctor_ID', 'label': 'Prescriber'},
+        {'field': 'Patient_ID', 'label': 'Patient',
+         'link_to': 'patients', 'link_match': 'Patient_ID', 'link_display': ['First_Name', 'Last_Name']},
+        {'field': 'Doctor_ID', 'label': 'Prescriber',
+         'link_to': 'doctors', 'link_match': 'Doctor_ID', 'link_display': ['Title', 'First_Name', 'Last_Name']},
         {'field': 'Dosage', 'label': 'Dosage'},
         {'field': 'Frequency', 'label': 'Frequency'},
         {'field': 'Quantity', 'label': 'Qty'},
@@ -129,7 +133,8 @@ FIELD_CONFIG = {
     ],
     'medical_history': [
         {'field': 'Record_ID', 'label': 'Record ID'},
-        {'field': 'Patient_ID', 'label': 'Patient', 'is_title': True},
+        {'field': 'Patient_ID', 'label': 'Patient', 'is_title': True,
+         'link_to': 'patients', 'link_match': 'Patient_ID', 'link_display': ['First_Name', 'Last_Name']},
         {'field': 'Condition', 'label': 'Condition'},
         {'field': 'Diagnosis_Date', 'label': 'Diagnosed'},
         {'field': 'Status', 'label': 'Status'},
@@ -169,6 +174,25 @@ function formatPercent(value) {
     if (isNaN(num)) return esc(String(value));
     return num + '%';
 }
+
+function linkedValue(idValue, entityKey, matchField, displayFields) {
+    if (!idValue) return '';
+    const records = data[entityKey] || [];
+    const match = records.find(r => String(r[matchField]) === String(idValue));
+    if (!match) return esc(String(idValue));
+    const label = displayFields.map(f => match[f] || '').filter(Boolean).join(' ').trim() || String(idValue);
+    const searchTerm = esc(label);
+    return `<a class="record-link" href="#" onclick="event.preventDefault();filterToLinked('${esc(entityKey)}','${esc(String(idValue))}','${esc(matchField)}')">${esc(label)}</a>`;
+}
+
+function filterToLinked(entityKey, idValue, matchField) {
+    // Switch filter tab and search for the specific ID
+    filterTo(entityKey);
+    searchInput.value = idValue;
+    performSearch();
+    var searchSection = document.getElementById('searchSection');
+    if (searchSection) window.scrollTo({top: searchSection.offsetTop - 80, behavior: 'smooth'});
+}
 """
 
     functions = [helpers]
@@ -202,8 +226,14 @@ function formatPercent(value) {
                 continue
             field_name = f['field']
             field_label = f['label']
+            link_to = f.get('link_to')
+            link_match = f.get('link_match')
+            link_display = f.get('link_display', [])
 
-            if f.get('format') == 'currency':
+            if link_to and link_match and link_display:
+                display_fields_js = '[' + ', '.join(f"'{d}'" for d in link_display) + ']'
+                value_expr = f"linkedValue(item['{field_name}'], '{link_to}', '{link_match}', {display_fields_js})"
+            elif f.get('format') == 'currency':
                 value_expr = f"formatCurrency(item['{field_name}'])"
             elif f.get('format') == 'percent':
                 value_expr = f"formatPercent(item['{field_name}'])"
