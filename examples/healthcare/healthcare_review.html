@@ -7,17 +7,20 @@
     <title>Healthcare Record Review</title>
     <style>
         :root {
-            --bg: #1a1a2e;
-            --surface: #0f3460;
-            --accent: #e94560;
-            --accent-light: #ff6b81;
-            --text: #eee;
-            --text-muted: #8892b0;
-            --card-bg: #1e2a4a;
-            --card-border: #2a3a5a;
-            --flag: #e6a817;
-            --flag-subtle: rgba(230, 168, 23, 0.15);
-            --flag-hover: rgba(230, 168, 23, 0.25);
+            /* The Sibling — tPP design system */
+            --bg: #181d26;
+            --surface: #222831;
+            --card-bg: #2a303c;
+            --card-border: #2e3848;
+            --accent: #c75c2a;
+            --accent-hover: #a84a20;
+            --accent-subtle: rgba(199,92,42,0.12);
+            --accent-light: #e8865a;
+            --text: #e4eaf4;
+            --text-muted: #8895aa;
+            --flag: #f59e0b;
+            --flag-subtle: rgba(245, 158, 11, 0.15);
+            --flag-hover: rgba(245, 158, 11, 0.28);
         }
         * { margin: 0; padding: 0; box-sizing: border-box; }
         body {
@@ -46,12 +49,12 @@
             border-radius: 6px;
             transition: background 0.2s;
         }
-        .help-link:hover { background: rgba(233, 69, 96, 0.1); }
+        .help-link:hover { background: rgba(199,92,42,0.12); }
         .subtitle { color: var(--text-muted); font-size: 14px; }
         .mission-context {
             margin-top: 15px;
             padding: 15px;
-            background: rgba(42, 58, 90, 0.6);
+            background: rgba(34,40,49,0.7);
             border-left: 4px solid var(--accent);
             border-radius: 4px;
             font-size: 14px;
@@ -66,19 +69,50 @@
             border-radius: 12px;
             box-shadow: 0 4px 12px rgba(0,0,0,0.3);
             margin-bottom: 20px;
+            border: 1px solid var(--card-border);
+        }
+        .search-label {
+            display: block;
+            font-size: 11px;
+            font-weight: 700;
+            letter-spacing: 0.08em;
+            text-transform: uppercase;
+            color: var(--accent-light);
+            margin-bottom: 10px;
         }
         .search-controls { display: flex; gap: 15px; margin-bottom: 20px; flex-wrap: wrap; }
         .search-input {
             flex: 1;
             min-width: 250px;
-            padding: 12px 20px;
-            border: 2px solid var(--card-border);
+            padding: 14px 20px;
+            border: 2px solid var(--accent);
             border-radius: 8px;
-            font-size: 15px;
+            font-size: 16px;
             background: var(--surface);
             color: var(--text);
+            box-shadow: 0 0 0 4px var(--accent-subtle);
+            transition: border-color 0.2s, box-shadow 0.2s;
         }
-        .search-input:focus { outline: none; border-color: var(--accent); }
+        .search-input:focus {
+            outline: none;
+            border-color: var(--accent);
+            box-shadow: 0 0 0 5px rgba(199,92,42,0.22);
+        }
+        .search-input.pulse-done {
+            border-color: var(--card-border);
+            box-shadow: none;
+        }
+        .search-input.pulse-done:focus {
+            border-color: var(--accent);
+            box-shadow: 0 0 0 5px rgba(199,92,42,0.22);
+        }
+        @keyframes searchPulse {
+            0%, 100% { box-shadow: 0 0 0 4px var(--accent-subtle); }
+            50% { box-shadow: 0 0 0 7px rgba(199,92,42,0.08); }
+        }
+        .search-input:not(.pulse-done) {
+            animation: searchPulse 2s ease-in-out 3;
+        }
         .filter-buttons { display: flex; gap: 10px; flex-wrap: wrap; }
         .filter-btn {
             padding: 10px 20px;
@@ -90,14 +124,14 @@
             font-size: 14px;
             font-weight: 600;
         }
-        .filter-btn:hover { background: rgba(233, 69, 96, 0.1); }
+        .filter-btn:hover { background: rgba(199,92,42,0.12); }
         .filter-btn.active { background: var(--accent); color: white; }
 
         .export-flags-btn {
             padding: 10px 20px;
             border: 2px solid var(--flag);
             background: var(--flag);
-            color: #856404;
+            color: #1a1a1a;
             border-radius: 8px;
             cursor: pointer;
             font-size: 14px;
@@ -123,7 +157,7 @@
         .stat-card:hover {
             transform: translateY(-2px);
             border-color: var(--accent);
-            box-shadow: 0 4px 16px rgba(233, 69, 96, 0.2);
+            box-shadow: 0 4px 16px rgba(199,92,42,0.18);
         }
         .stat-number { font-size: 32px; font-weight: bold; margin-bottom: 5px; color: var(--accent); }
         .stat-label { font-size: 13px; color: var(--text-muted); }
@@ -143,12 +177,12 @@
             transition: all 0.3s;
         }
         .result-item:hover {
-            box-shadow: 0 4px 12px rgba(233, 69, 96, 0.2);
+            box-shadow: 0 4px 12px rgba(199,92,42,0.18);
             border-color: var(--accent);
         }
         .result-item.flagged {
             border: 2px solid var(--flag);
-            background: rgba(42, 58, 90, 0.8);
+            background: rgba(34,40,49,0.85);
         }
 
         .result-header { display: flex; justify-content: space-between; margin-bottom: 15px; align-items: start; }
@@ -177,16 +211,38 @@
 
         .flag-note-input {
             width: 100%;
-            padding: 8px;
-            border: 1px solid var(--card-border);
-            background: var(--surface);
+            padding: 10px 12px;
+            border: 1px solid var(--flag);
+            background: var(--flag-subtle);
             color: var(--text);
-            border-radius: 4px;
+            border-radius: 6px;
             font-size: 13px;
-            margin-top: 8px;
+            font-family: inherit;
+            margin-top: 10px;
             display: none;
+            transition: border-color 0.2s, box-shadow 0.2s;
+            max-height: 0;
+            overflow: hidden;
         }
-        .flag-note-input.active { display: block; }
+        .flag-note-input::placeholder {
+            color: var(--flag);
+            opacity: 0.7;
+        }
+        .flag-note-input:focus {
+            outline: none;
+            border-color: var(--flag);
+            box-shadow: 0 0 0 3px rgba(245,158,11,0.2);
+            background: rgba(245,158,11,0.1);
+        }
+        .flag-note-input.active {
+            display: block;
+            max-height: 200px;
+            animation: noteSlideIn 0.2s ease-out forwards;
+        }
+        @keyframes noteSlideIn {
+            from { opacity: 0; transform: translateY(-4px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
 
         .result-details {
             display: grid;
@@ -225,7 +281,7 @@
         .relationship-list { display: flex; flex-wrap: wrap; gap: 8px; }
         .relationship-tag {
             padding: 6px 12px;
-            background: rgba(42, 58, 90, 0.6);
+            background: rgba(34,40,49,0.7);
             border: 1px solid var(--card-border);
             border-radius: 6px;
             font-size: 13px;
@@ -282,7 +338,7 @@
         .welcome-content h2 { color: var(--accent); font-size: 28px; margin-bottom: 10px; }
         .welcome-content .tagline { color: var(--text-muted); font-size: 14px; margin-bottom: 25px; font-style: italic; }
         .welcome-features {
-            background: rgba(42, 58, 90, 0.6);
+            background: rgba(34,40,49,0.7);
             border-radius: 8px;
             padding: 20px;
             margin: 25px 0;
@@ -294,14 +350,14 @@
         .welcome-feature-title { font-weight: 600; color: var(--text); margin-bottom: 3px; }
         .welcome-feature-desc { font-size: 14px; color: var(--text-muted); line-height: 1.4; }
         .welcome-note {
-            background: var(--flag-hover);
+            background: var(--surface);
             border-left: 4px solid var(--flag);
             padding: 15px;
             margin: 25px 0;
             border-radius: 4px;
         }
-        .welcome-note-title { font-weight: 600; color: #856404; margin-bottom: 5px; font-size: 14px; }
-        .welcome-note-text { font-size: 13px; color: #856404; line-height: 1.5; }
+        .welcome-note-title { font-weight: 600; color: var(--flag); margin-bottom: 5px; font-size: 14px; }
+        .welcome-note-text { font-size: 13px; color: var(--text-muted); line-height: 1.5; }
         .welcome-btn {
             width: 100%;
             padding: 14px 24px;
@@ -310,11 +366,11 @@
             font-size: 15px;
             font-weight: 600;
             cursor: pointer;
-            background: linear-gradient(135deg, var(--accent) 0%, #c73652 100%);
+            background: var(--accent);
             color: white;
             margin-top: 25px;
         }
-        .welcome-btn:hover { transform: translateY(-2px); box-shadow: 0 6px 20px rgba(233, 69, 96, 0.4); }
+        .welcome-btn:hover { transform: translateY(-2px); box-shadow: 0 6px 20px rgba(199,92,42,0.3); }
 
         .type-patients { background: #e3f2fd; color: #1565c0; }
         .type-doctors { background: #e8f5e9; color: #2e7d32; }
@@ -363,11 +419,11 @@
             <div class="welcome-note-title">💡 Think of this as a "disposable data viewer"</div>
             <div class="welcome-note-text">This tool was custom-generated for this specific data review. It's intentionally lightweight and temporary - perfect for one-time exploration without the overhead of a full application.</div>
         </div>
-        <div class="welcome-note" style="background: rgba(42, 58, 90, 0.8); border-left-color: var(--accent);">
-            <div class="welcome-note-title">📊 Session Activity</div>
+        <div class="welcome-note" style="border-left-color: var(--accent);">
+            <div class="welcome-note-title" style="color: var(--accent-light);">📊 Session Activity</div>
             <div class="welcome-note-text">Your search and flag activity during this session is included in the exported report to help the review process.</div>
         </div>
-        <div style="text-align: center; margin-top: 15px; font-size: 12px; color: #999;">🔑 App ID: <code style="background: rgba(42, 58, 90, 0.8); padding: 2px 6px; border-radius: 3px; color: #eee;" id="welcomeAppId"></code></div>
+        <div style="text-align: center; margin-top: 15px; font-size: 12px; color: var(--text-muted);">🔑 App ID: <code style="background: var(--surface); padding: 2px 6px; border-radius: 3px; color: var(--text);" id="welcomeAppId"></code></div>
         <button class="welcome-btn" onclick="document.getElementById('welcomeModal').classList.add('hidden')">Let's Get Started →</button>
     </div>
 </div>
@@ -387,8 +443,9 @@
     </div>
 
     <div class="search-section">
+        <label class="search-label" for="searchInput">🔍 Search records — start here</label>
         <div class="search-controls">
-            <input type="text" class="search-input" id="searchInput" placeholder="Search across all fields...">
+            <input type="text" class="search-input" id="searchInput" placeholder="Search patients, doctors, medications, appointments..." autofocus>
             <button class="clear-btn hidden" id="clearBtn">✕ Clear</button>
             <div class="filter-buttons">
                 <button class="filter-btn active" data-filter="all">All</button>
@@ -449,6 +506,12 @@ const missionInfo = {"mission_id": "healthcare-record-review-20260330-8ffeb4", "
 const _appIdEl = document.getElementById('welcomeAppId');
 if (_appIdEl) _appIdEl.textContent = missionInfo.mission_id || '';
 const searchInput = document.getElementById('searchInput');
+
+// Stop the search pulse animation once the user first interacts
+searchInput.addEventListener('focus', function stopPulse() {
+    searchInput.classList.add('pulse-done');
+    searchInput.removeEventListener('focus', stopPulse);
+}, { once: true });
 
 const analytics = {
     sessionStart: new Date().toISOString(),
@@ -702,7 +765,7 @@ function render_patients(item) {
             </button>
         </div>
         <input type="text" class="flag-note-input ${isFlagged ? 'active' : ''}"
-               placeholder="What's the issue with this record? (optional)"
+               placeholder="Add a note for the Coordinator — what did you find?"
                value="${flaggedRec ? esc(flaggedRec.note) : ''}"
                onchange="updateFlagNote('${recordId}', this.value)">
         <div class="result-details">
@@ -739,7 +802,7 @@ function render_doctors(item) {
             </button>
         </div>
         <input type="text" class="flag-note-input ${isFlagged ? 'active' : ''}"
-               placeholder="What's the issue with this record? (optional)"
+               placeholder="Add a note for the Coordinator — what did you find?"
                value="${flaggedRec ? esc(flaggedRec.note) : ''}"
                onchange="updateFlagNote('${recordId}', this.value)">
         <div class="result-details">
@@ -773,7 +836,7 @@ function render_appointments(item) {
             </button>
         </div>
         <input type="text" class="flag-note-input ${isFlagged ? 'active' : ''}"
-               placeholder="What's the issue with this record? (optional)"
+               placeholder="Add a note for the Coordinator — what did you find?"
                value="${flaggedRec ? esc(flaggedRec.note) : ''}"
                onchange="updateFlagNote('${recordId}', this.value)">
         <div class="result-details">
@@ -809,7 +872,7 @@ function render_prescriptions(item) {
             </button>
         </div>
         <input type="text" class="flag-note-input ${isFlagged ? 'active' : ''}"
-               placeholder="What's the issue with this record? (optional)"
+               placeholder="Add a note for the Coordinator — what did you find?"
                value="${flaggedRec ? esc(flaggedRec.note) : ''}"
                onchange="updateFlagNote('${recordId}', this.value)">
         <div class="result-details">
@@ -846,7 +909,7 @@ function render_medical_history(item) {
             </button>
         </div>
         <input type="text" class="flag-note-input ${isFlagged ? 'active' : ''}"
-               placeholder="What's the issue with this record? (optional)"
+               placeholder="Add a note for the Coordinator — what did you find?"
                value="${flaggedRec ? esc(flaggedRec.note) : ''}"
                onchange="updateFlagNote('${recordId}', this.value)">
         <div class="result-details">
