@@ -154,19 +154,21 @@ HTML_TEMPLATE = """<!DOCTYPE html>
             flex: 1;
             min-width: 150px;
             padding: 20px;
-            background: linear-gradient(135deg, var(--accent) 0%, #c73652 100%);
+            background: var(--card-bg);
+            border: 1px solid var(--card-border);
             color: white;
             border-radius: 8px;
             text-align: center;
             cursor: pointer;
-            transition: transform 0.2s, box-shadow 0.2s;
+            transition: transform 0.2s, box-shadow 0.2s, border-color 0.2s;
         }}
         .stat-card:hover {{
             transform: translateY(-2px);
-            box-shadow: 0 6px 20px rgba(233, 69, 96, 0.4);
+            border-color: var(--accent);
+            box-shadow: 0 4px 16px rgba(233, 69, 96, 0.2);
         }}
-        .stat-number {{ font-size: 32px; font-weight: bold; margin-bottom: 5px; }}
-        .stat-label {{ font-size: 13px; opacity: 0.9; }}
+        .stat-number {{ font-size: 32px; font-weight: bold; margin-bottom: 5px; color: var(--accent); }}
+        .stat-label {{ font-size: 13px; color: var(--text-muted); }}
 
         .results-section {{
             background: var(--card-bg);
@@ -242,6 +244,13 @@ HTML_TEMPLATE = """<!DOCTYPE html>
             text-transform: uppercase;
         }}
         .detail-value {{ font-size: 14px; color: var(--text); }}
+        .record-link {{
+            color: var(--accent-light, #ff6b81);
+            text-decoration: none;
+            border-bottom: 1px solid rgba(255,107,129,0.3);
+            transition: border-color 0.15s;
+        }}
+        .record-link:hover {{ border-bottom-color: var(--accent-light, #ff6b81); }}
 
         .relationships {{
             margin-top: 15px;
@@ -400,7 +409,7 @@ HTML_TEMPLATE = """<!DOCTYPE html>
         <div class="stats">
             {stats_cards}
             <div class="stat-card"><div class="stat-number" id="resultCount">0</div><div class="stat-label">Results Found</div></div>
-            <div class="stat-card" style="background: linear-gradient(135deg, #ffc107 0%, #ff9800 100%);"><div class="stat-number" id="flaggedCount">0</div><div class="stat-label">Flagged Issues</div></div>
+            <div class="stat-card" style="border-color: rgba(255,193,7,0.35);"><div class="stat-number" style="color: #ffc107;" id="flaggedCount">0</div><div class="stat-label">Flagged Issues</div></div>
         </div>
     </div>
 
