@@ -15,6 +15,9 @@
             --text-muted: #8892b0;
             --card-bg: #1e2a4a;
             --card-border: #2a3a5a;
+            --flag: #e6a817;
+            --flag-subtle: rgba(230, 168, 23, 0.15);
+            --flag-hover: rgba(230, 168, 23, 0.25);
         }
         * { margin: 0; padding: 0; box-sizing: border-box; }
         body {
@@ -92,8 +95,8 @@
 
         .export-flags-btn {
             padding: 10px 20px;
-            border: 2px solid #ffc107;
-            background: #ffc107;
+            border: 2px solid var(--flag);
+            background: var(--flag);
             color: #856404;
             border-radius: 8px;
             cursor: pointer;
@@ -109,19 +112,21 @@
             flex: 1;
             min-width: 150px;
             padding: 20px;
-            background: linear-gradient(135deg, var(--accent) 0%, #c73652 100%);
+            background: var(--card-bg);
+            border: 1px solid var(--card-border);
             color: white;
             border-radius: 8px;
             text-align: center;
             cursor: pointer;
-            transition: transform 0.2s, box-shadow 0.2s;
+            transition: transform 0.2s, box-shadow 0.2s, border-color 0.2s;
         }
         .stat-card:hover {
             transform: translateY(-2px);
-            box-shadow: 0 6px 20px rgba(233, 69, 96, 0.4);
+            border-color: var(--accent);
+            box-shadow: 0 4px 16px rgba(233, 69, 96, 0.2);
         }
-        .stat-number { font-size: 32px; font-weight: bold; margin-bottom: 5px; }
-        .stat-label { font-size: 13px; opacity: 0.9; }
+        .stat-number { font-size: 32px; font-weight: bold; margin-bottom: 5px; color: var(--accent); }
+        .stat-label { font-size: 13px; color: var(--text-muted); }
 
         .results-section {
             background: var(--card-bg);
@@ -142,7 +147,7 @@
             border-color: var(--accent);
         }
         .result-item.flagged {
-            border: 2px solid #ffc107;
+            border: 2px solid var(--flag);
             background: rgba(42, 58, 90, 0.8);
         }
 
@@ -158,17 +163,17 @@
 
         .flag-btn {
             padding: 6px 12px;
-            border: 1px solid #ffc107;
+            border: 1px solid var(--flag);
             background: var(--card-bg);
-            color: #ffc107;
+            color: var(--flag);
             border-radius: 6px;
             cursor: pointer;
             font-size: 12px;
             font-weight: 600;
             transition: all 0.3s;
         }
-        .flag-btn:hover { background: #fff3cd; }
-        .flag-btn.flagged { background: #ffc107; color: white; }
+        .flag-btn:hover { background: var(--flag-hover); }
+        .flag-btn.flagged { background: var(--flag); color: white; }
 
         .flag-note-input {
             width: 100%;
@@ -289,8 +294,8 @@
         .welcome-feature-title { font-weight: 600; color: var(--text); margin-bottom: 3px; }
         .welcome-feature-desc { font-size: 14px; color: var(--text-muted); line-height: 1.4; }
         .welcome-note {
-            background: #fff3cd;
-            border-left: 4px solid #ffc107;
+            background: var(--flag-hover);
+            border-left: 4px solid var(--flag);
             padding: 15px;
             margin: 25px 0;
             border-radius: 4px;
@@ -358,7 +363,7 @@
             <div class="welcome-note-title">💡 Think of this as a "disposable data viewer"</div>
             <div class="welcome-note-text">This tool was custom-generated for this specific data review. It's intentionally lightweight and temporary - perfect for one-time exploration without the overhead of a full application.</div>
         </div>
-        <div class="welcome-note" style="background: rgba(42, 58, 90, 0.8); border-left-color: #e94560;">
+        <div class="welcome-note" style="background: rgba(42, 58, 90, 0.8); border-left-color: var(--accent);">
             <div class="welcome-note-title">📊 Session Activity</div>
             <div class="welcome-note-text">Your search and flag activity during this session is included in the exported report to help the review process.</div>
         </div>
@@ -402,7 +407,7 @@
             <div class="stat-card" onclick="filterTo('prescriptions')"><div class="stat-number" id="prescriptionsCount">0</div><div class="stat-label">Prescriptions</div></div>
             <div class="stat-card" onclick="filterTo('medical_history')"><div class="stat-number" id="medical_historyCount">0</div><div class="stat-label">Medical History</div></div>
             <div class="stat-card"><div class="stat-number" id="resultCount">0</div><div class="stat-label">Results Found</div></div>
-            <div class="stat-card" style="background: linear-gradient(135deg, #ffc107 0%, #ff9800 100%);"><div class="stat-number" id="flaggedCount">0</div><div class="stat-label">Flagged Issues</div></div>
+            <div class="stat-card" style="border-color: var(--flag-subtle);"><div class="stat-number" style="color: var(--flag);" id="flaggedCount">0</div><div class="stat-label">Flagged Issues</div></div>
         </div>
     </div>
 
@@ -440,7 +445,7 @@ let data;
 let currentFilter = 'all';
 let flaggedRecords = [];
 let recordLookup = {};
-const missionInfo = {"mission_id": "healthcare-record-review-20260330-a2ae2d", "data_fingerprint": "cd791f082ea58b97", "app_fingerprint": "f989af0e2666db14", "generated": "2026-03-30T09:55:53.166757", "preview": false, "title": "Healthcare Record Review"};
+const missionInfo = {"mission_id": "healthcare-record-review-20260330-8ffeb4", "data_fingerprint": "cd791f082ea58b97", "app_fingerprint": "f989af0e2666db14", "generated": "2026-03-30T10:17:31.666654", "preview": false, "title": "Healthcare Record Review"};
 const _appIdEl = document.getElementById('welcomeAppId');
 if (_appIdEl) _appIdEl.textContent = missionInfo.mission_id || '';
 const searchInput = document.getElementById('searchInput');

@@ -60,6 +60,9 @@ HTML_TEMPLATE = """<!DOCTYPE html>
             --text-muted: #8892b0;
             --card-bg: #1e2a4a;
             --card-border: #2a3a5a;
+            --flag: #e6a817;
+            --flag-subtle: rgba(230, 168, 23, 0.15);
+            --flag-hover: rgba(230, 168, 23, 0.25);
         }}
         * {{ margin: 0; padding: 0; box-sizing: border-box; }}
         body {{
@@ -137,8 +140,8 @@ HTML_TEMPLATE = """<!DOCTYPE html>
 
         .export-flags-btn {{
             padding: 10px 20px;
-            border: 2px solid #ffc107;
-            background: #ffc107;
+            border: 2px solid var(--flag);
+            background: var(--flag);
             color: #856404;
             border-radius: 8px;
             cursor: pointer;
@@ -189,7 +192,7 @@ HTML_TEMPLATE = """<!DOCTYPE html>
             border-color: var(--accent);
         }}
         .result-item.flagged {{
-            border: 2px solid #ffc107;
+            border: 2px solid var(--flag);
             background: rgba(42, 58, 90, 0.8);
         }}
 
@@ -205,17 +208,17 @@ HTML_TEMPLATE = """<!DOCTYPE html>
 
         .flag-btn {{
             padding: 6px 12px;
-            border: 1px solid #ffc107;
+            border: 1px solid var(--flag);
             background: var(--card-bg);
-            color: #ffc107;
+            color: var(--flag);
             border-radius: 6px;
             cursor: pointer;
             font-size: 12px;
             font-weight: 600;
             transition: all 0.3s;
         }}
-        .flag-btn:hover {{ background: #fff3cd; }}
-        .flag-btn.flagged {{ background: #ffc107; color: white; }}
+        .flag-btn:hover {{ background: var(--flag-hover); }}
+        .flag-btn.flagged {{ background: var(--flag); color: white; }}
 
         .flag-note-input {{
             width: 100%;
@@ -336,8 +339,8 @@ HTML_TEMPLATE = """<!DOCTYPE html>
         .welcome-feature-title {{ font-weight: 600; color: var(--text); margin-bottom: 3px; }}
         .welcome-feature-desc {{ font-size: 14px; color: var(--text-muted); line-height: 1.4; }}
         .welcome-note {{
-            background: #fff3cd;
-            border-left: 4px solid #ffc107;
+            background: var(--flag-hover);
+            border-left: 4px solid var(--flag);
             padding: 15px;
             margin: 25px 0;
             border-radius: 4px;
@@ -374,7 +377,7 @@ HTML_TEMPLATE = """<!DOCTYPE html>
             <div class="welcome-note-title">💡 Think of this as a "disposable data viewer"</div>
             <div class="welcome-note-text">This tool was custom-generated for this specific data review. It's intentionally lightweight and temporary - perfect for one-time exploration without the overhead of a full application.</div>
         </div>
-        <div class="welcome-note" style="background: rgba(42, 58, 90, 0.8); border-left-color: #e94560;">
+        <div class="welcome-note" style="background: rgba(42, 58, 90, 0.8); border-left-color: var(--accent);">
             <div class="welcome-note-title">📊 Session Activity</div>
             <div class="welcome-note-text">Your search and flag activity during this session is included in the exported report to help the review process.</div>
         </div>
@@ -409,7 +412,7 @@ HTML_TEMPLATE = """<!DOCTYPE html>
         <div class="stats">
             {stats_cards}
             <div class="stat-card"><div class="stat-number" id="resultCount">0</div><div class="stat-label">Results Found</div></div>
-            <div class="stat-card" style="border-color: rgba(255,193,7,0.35);"><div class="stat-number" style="color: #ffc107;" id="flaggedCount">0</div><div class="stat-label">Flagged Issues</div></div>
+            <div class="stat-card" style="border-color: var(--flag-subtle);"><div class="stat-number" style="color: var(--flag);" id="flaggedCount">0</div><div class="stat-label">Flagged Issues</div></div>
         </div>
     </div>
 
@@ -452,7 +455,7 @@ function showNotYetActive() {
         <div style="min-height: 100vh; display: flex; align-items: center; justify-content: center; background: #1a1a2e; padding: 20px;">
             <div style="background: #1e2a4a; border-radius: 16px; padding: 60px; max-width: 500px; text-align: center; box-shadow: 0 20px 60px rgba(0,0,0,0.5);">
                 <div style="font-size: 80px; margin-bottom: 20px;">⏳</div>
-                <h1 style="color: #e94560; margin-bottom: 15px; font-size: 28px;">Not Yet Active</h1>
+                <h1 style="color: var(--accent); margin-bottom: 15px; font-size: 28px;">Not Yet Active</h1>
                 <p style="color: #666; font-size: 16px; line-height: 1.6; margin-bottom: 25px;">
                     This Mission App isn't ready yet. It will activate on:
                 </p>
@@ -460,7 +463,7 @@ function showNotYetActive() {
                     <div style="font-size: 24px; font-weight: bold; color: #eee;">
                         ${activeDate.toLocaleDateString('en-US', { weekday: 'long', month: 'long', day: 'numeric', year: 'numeric' })}
                     </div>
-                    <div style="font-size: 18px; color: #e94560; margin-top: 5px;">
+                    <div style="font-size: 18px; color: var(--accent); margin-top: 5px;">
                         ${activeDate.toLocaleTimeString('en-US', { hour: '2-digit', minute: '2-digit', timeZoneName: 'short' })}
                     </div>
                 </div>
@@ -490,7 +493,7 @@ function showExpiredState() {
                 ${flagCount > 0 ? `
                 <div style="margin-top: 30px;">
                     <p style="font-size: 14px; color: rgba(255,255,255,0.8); margin-bottom: 15px;">You have ${flagCount} flagged record${flagCount !== 1 ? 's' : ''} to export</p>
-                    <button id="expiredExportBtn" style="background: linear-gradient(135deg, #ffc107 0%, #ffca2c 100%); color: #000; border: none; padding: 12px 24px; border-radius: 8px; font-size: 16px; font-weight: bold; cursor: pointer; box-shadow: 0 4px 15px rgba(255,193,7,0.4);">
+                    <button id="expiredExportBtn" style="background: linear-gradient(135deg, #e6a817 0%, #d4950f 100%); color: #000; border: none; padding: 12px 24px; border-radius: 8px; font-size: 16px; font-weight: bold; cursor: pointer; box-shadow: 0 4px 15px rgba(230,168,23,0.4);">
                         📋 Export Flagged Records
                     </button>
                 </div>
@@ -582,7 +585,7 @@ function showCountdownBanner() {
     if (!EXPIRATION_CONFIG.activeUntil) return;
     const banner = document.createElement('div');
     banner.id = 'expirationBanner';
-    banner.style.cssText = 'background: linear-gradient(90deg, #fff3cd 0%, #ffe8a1 100%); border-bottom: 2px solid #ffc107; padding: 10px 20px; text-align: center; font-size: 14px; color: #856404; position: fixed; top: 0; left: 0; right: 0; z-index: 999; box-shadow: 0 2px 4px rgba(0,0,0,0.1);';
+    banner.style.cssText = 'background: linear-gradient(90deg, rgba(230,168,23,0.15) 0%, rgba(230,168,23,0.25) 100%); border-bottom: 2px solid #e6a817; padding: 10px 20px; text-align: center; font-size: 14px; color: #e6a817; position: fixed; top: 0; left: 0; right: 0; z-index: 999; box-shadow: 0 2px 4px rgba(0,0,0,0.1);';
     banner.innerHTML = '⏰ This app will expire in <strong id="countdown"></strong>. Complete your work and export results before then.';
     document.body.insertBefore(banner, document.body.firstChild);
     document.body.style.paddingTop = '50px';
@@ -681,7 +684,7 @@ function showSessionExpiredState(sessionStart, expiresAt) {
                 ${flagCount > 0 ? `
                 <div style="margin-top: 30px;">
                     <p style="font-size: 14px; color: rgba(255,255,255,0.8); margin-bottom: 15px;">You have ${flagCount} flagged record${flagCount !== 1 ? 's' : ''} to export</p>
-                    <button id="expiredExportBtn" style="background: linear-gradient(135deg, #ffc107 0%, #ffca2c 100%); color: #000; border: none; padding: 12px 24px; border-radius: 8px; font-size: 16px; font-weight: bold; cursor: pointer; box-shadow: 0 4px 15px rgba(255,193,7,0.4);">
+                    <button id="expiredExportBtn" style="background: linear-gradient(135deg, #e6a817 0%, #d4950f 100%); color: #000; border: none; padding: 12px 24px; border-radius: 8px; font-size: 16px; font-weight: bold; cursor: pointer; box-shadow: 0 4px 15px rgba(230,168,23,0.4);">
                         📋 Export Flagged Records
                     </button>
                 </div>
@@ -773,7 +776,7 @@ function exportFromExpiredState() {
 function showSessionCountdownBanner(sessionStart, expiresAt) {
     const banner = document.createElement('div');
     banner.id = 'expirationBanner';
-    banner.style.cssText = 'background: linear-gradient(90deg, #fff3cd 0%, #ffe8a1 100%); border-bottom: 2px solid #ffc107; padding: 10px 20px; text-align: center; font-size: 14px; color: #856404; position: fixed; top: 0; left: 0; right: 0; z-index: 999; box-shadow: 0 2px 4px rgba(0,0,0,0.1);';
+    banner.style.cssText = 'background: linear-gradient(90deg, rgba(230,168,23,0.15) 0%, rgba(230,168,23,0.25) 100%); border-bottom: 2px solid #e6a817; padding: 10px 20px; text-align: center; font-size: 14px; color: #e6a817; position: fixed; top: 0; left: 0; right: 0; z-index: 999; box-shadow: 0 2px 4px rgba(0,0,0,0.1);';
     banner.innerHTML = '⏰ Session expires in <strong id="countdown"></strong>. Complete your work and export results before then.';
     document.body.insertBefore(banner, document.body.firstChild);
     document.body.style.paddingTop = '50px';
@@ -1334,12 +1337,12 @@ def generate_html(data, entity_config, field_config, render_functions, search_fu
 
     # Expiration notice
     if session_config:
-        expiration_notice = f'''<div class="welcome-note" style="background: #fff3cd; border-left-color: #ffc107;">
+        expiration_notice = f'''<div class="welcome-note" style="background: var(--flag-hover); border-left-color: var(--flag);">
             <div class="welcome-note-title">⏰ This {'preview' if preview_mode else 'app'} has a time limit</div>
             <div class="welcome-note-text">This {'Preview' if preview_mode else 'Mission App'} will expire <strong>{session_config['durationDisplay']}</strong> after you first open it.</div>
         </div>'''
     elif expiration_config.get('enabled') and expiration_config.get('activeUntilDisplay'):
-        expiration_notice = f'''<div class="welcome-note" style="background: #fff3cd; border-left-color: #ffc107;">
+        expiration_notice = f'''<div class="welcome-note" style="background: var(--flag-hover); border-left-color: var(--flag);">
             <div class="welcome-note-title">⏰ This {'preview' if preview_mode else 'app'} has a deadline</div>
             <div class="welcome-note-text">This {'Preview' if preview_mode else 'Mission App'} will expire on <strong>{expiration_config['activeUntilDisplay']}</strong>.</div>
         </div>'''
