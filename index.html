@@ -95,10 +95,19 @@
       gap: 12px;
     }
     .nav-wordmark {
+      display: flex;
+      align-items: center;
+      gap: 8px;
       font-size: 15px;
       font-weight: 700;
       color: var(--color-text);
       letter-spacing: -0.01em;
+    }
+    .nav-wordmark img {
+      width: 22px;
+      height: 22px;
+      border-radius: 5px;
+      flex-shrink: 0;
     }
     .nav-wordmark span { color: var(--color-primary); }
     .nav-by {
@@ -486,7 +495,7 @@
   <nav>
     <div class="nav-inner">
       <div class="nav-brand">
-        <span class="nav-wordmark">Burner<span>Apps</span></span>
+        <span class="nav-wordmark"><img src="favicon.png" alt="Burner Apps">Burner<span>Apps</span></span>
         <span class="nav-by">by <a href="https://www.theproductpath.com" target="_blank">theProductPath</a></span>
       </div>
       <a class="nav-link" href="https://github.com/theproductpath/burner-apps" target="_blank">GitHub →</a>
@@ -504,7 +513,7 @@
       </p>
       <div class="hero-ctas">
         <a class="btn btn-primary" href="https://github.com/theproductpath/burner-apps" target="_blank">View on GitHub →</a>
-        <a class="btn btn-ghost" href="mailto:sjones@theproductpath.com">Talk to Jones</a>
+        <a class="btn btn-ghost" href="mailto:sjones@theproductpath.com">Talk with Steven</a>
       </div>
 
       <div style="max-width:760px;margin:40px auto 0;border-radius:16px;overflow:hidden;box-shadow:0 8px 24px rgba(0,0,0,0.5);border:1px solid var(--color-border);">
@@ -620,7 +629,7 @@
           <div class="card-icon">🔥</div>
           <div class="card-title">We build it for you.</div>
           <div class="card-body">Tell us the problem. We'll have something in your hands by end of week. You distribute to your team, collect the report, and hand off. Zero effort on your side. Zero training for the Consumer.</div>
-          <a class="card-cta" href="mailto:sjones@theproductpath.com">Talk to Jones →</a>
+          <a class="card-cta" href="mailto:sjones@theproductpath.com">Talk with Steven →</a>
         </div>
         <div class="engage-card">
           <div class="card-icon">⚙️</div>
@@ -685,7 +694,7 @@
       <p class="cta-sub">See the generator, the report processor, and working examples built from real client engagements.</p>
       <div class="cta-ctas">
         <a class="btn btn-primary" href="https://github.com/theproductpath/burner-apps" target="_blank">View on GitHub →</a>
-        <a class="btn btn-ghost" href="mailto:sjones@theproductpath.com">Talk to Jones</a>
+        <a class="btn btn-ghost" href="mailto:sjones@theproductpath.com">Talk with Steven</a>
       </div>
     </div>
   </section>
