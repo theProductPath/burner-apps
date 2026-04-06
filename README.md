@@ -12,6 +12,8 @@ A Burner App is a purpose-built, single-use tool designed to solve one clearly d
 
 **The impermanence is the feature, not the limitation.**
 
+**Public landing page:** <a href="https://burner-apps.theproductpath.com/" target="_blank" rel="noopener noreferrer">burner-apps.theproductpath.com</a>
+
 ---
 
 ## The Problem It Solves
@@ -128,6 +130,8 @@ Every Burner App ships with:
 ---
 
 ## The tPP Offering
+
+Burner Apps is delivered in two ways. Public-facing site and marketing assets live in the companion repo: <a href="https://github.com/theProductPath/burner-apps-site" target="_blank" rel="noopener noreferrer">burner-apps-site</a>.
 
 Burner Apps is delivered in two ways:
 
