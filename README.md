@@ -14,6 +14,8 @@ A Burner App is a purpose-built, single-use tool designed to solve one clearly d
 
 **Public landing page:** <a href="https://burner-apps.theproductpath.com/" target="_blank" rel="noopener noreferrer">burner-apps.theproductpath.com</a>
 
+*Last refreshed: 2026-04-06*
+
 ---
 
 ## The Problem It Solves
